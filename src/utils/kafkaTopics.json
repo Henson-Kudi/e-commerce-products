@@ -1,0 +1,21 @@
+{
+  "productUpdated": "productUpdated",
+  "productCreated": "productCreated",
+  "productDeleted": "productDeleted",
+  "productsDeleted": "productsDeleted",
+
+  "brandUpdated": "brandUpdated",
+  "brandCreated": "brandCreated",
+  "brandDeleted": "brandDeleted",
+  "brandsDeleted": "brandsDeleted",
+
+  "categoryUpdated": "categoryUpdated",
+  "categoryCreated": "categoryCreated",
+  "categoryDeleted": "categoryDeleted",
+  "categoriesDeleted": "categoriesDeleted",
+
+  "taxUpdated": "taxUpdated",
+  "taxCreated": "taxCreated",
+  "taxDeleted": "taxDeleted",
+  "taxesDeleted": "taxesDeleted"
+}

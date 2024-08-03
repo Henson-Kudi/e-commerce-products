@@ -14,3 +14,82 @@ datasource db {
 }
 
 // Define your database models below
+
+model Product {
+  id                String     @id @default(uuid())
+  name              String     @unique //Product name has to be unique accross
+  description       String?
+  price             Float
+  currency          String?    @default("AED")
+  brandId           String
+  brand             Brand      @relation(references: [id], fields: [brandId])
+  tags              String[]
+  SKU               String     @unique // Internal tracking
+  UPC               String? // Barcode number for North America
+  EAN               String? // Barcode number for international use
+  media             Json? // Images and videos of the product. Should implement a structure as such: {type: 'VIDEO' | 'IMAGE', url: STRING}[]
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  createdById       String
+  lastModifiedById  String?
+  status            Int
+  stockStatus       Int
+  slug              String     @unique // slugified product name
+  metaTitle         String? //SEO
+  metaDescription   String? // SEO
+  metaKeywords      String[] // SEO
+  qtyInStock        Int?       @default(0)
+  originalPrice     Float
+  taxes             Tax[] //Manage taxes
+  categories        Category[] //Manage taxes
+  discountedPrice   Float?
+  discountStartDate DateTime?
+  discountEndDate   DateTime?
+  averageRating     Float?     @default(0)
+  reviewCount       Int?       @default(0)
+  unit              String // unit of measurement (kg, pcs, plates, unit, pack, etc)
+  size              String? //Product size
+  color             String? // product color
+  weight            String? // Product weight
+  dimensions        String? // Product dimensions
+  attributes        Json? //Other product attributes. Record<string, string>
+}
+
+model Brand {
+  id               String    @id @default(uuid())
+  name             String    @unique // We don't want to have repeated brands
+  slug             String    @unique // slugified name
+  image            String?
+  createdById      String //We can only match the string since we do not have the userId
+  lastModifiedById String?
+  products         Product[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  description      String?
+}
+
+model Category {
+  id               String    @id @default(uuid())
+  name             String    @unique // We don't want to have repeated categoriers
+  slug             String    @unique // slugified name
+  image            String?
+  createdById      String //We can only match the string since we do not have the userId
+  lastModifiedById String?
+  products         Product[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  description      String?
+}
+
+model Tax {
+  id               String    @id @default(uuid())
+  name             String    @unique
+  slug             String    @unique
+  rate             Float
+  createdById      String //We can only match the string since we do not have the userId
+  lastModifiedById String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  products         Product[]
+  description      String?
+}
