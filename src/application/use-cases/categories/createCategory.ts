@@ -57,11 +57,8 @@ export default class CreateCategoryUseCase
     try {
       await messageBroker.publish({
         topic: categoryCreated,
-        messages: [
-          {
-            value: JSON.stringify(newCategory),
-          },
-        ],
+        message: JSON.stringify(newCategory),
+        key: newCategory.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

@@ -16,6 +16,7 @@ export type UpdateTaxDTO = {
 };
 
 export type FindTaxFilter = {
+  id?: string | string[];
   name?: string;
   rate?: { min?: number; max?: number };
   createdById?: string | string[];

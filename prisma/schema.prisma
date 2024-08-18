@@ -17,6 +17,7 @@ datasource db {
 
 model Product {
   id                String     @id @default(uuid())
+  serialNumber      Int        @unique @default(autoincrement())
   name              String     @unique //Product name has to be unique accross
   description       String?
   price             Float

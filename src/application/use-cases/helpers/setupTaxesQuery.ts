@@ -31,6 +31,10 @@ export default function setupTaxesQuery(filter: FindTaxFilter) {
       : filter.createdById;
   }
 
+  if (filter?.id) {
+    query.id = Array.isArray(filter.id) ? { in: filter.id } : filter.id;
+  }
+
   if (filter?.lastModifiedById) {
     query.lastModifiedById = Array.isArray(filter.lastModifiedById)
       ? { in: filter.lastModifiedById }

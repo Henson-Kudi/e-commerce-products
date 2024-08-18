@@ -66,11 +66,8 @@ export default class DeleteBrand
     try {
       await messageBroker.publish({
         topic: brandDeleted,
-        messages: [
-          {
-            value: JSON.stringify(deletedBrand),
-          },
-        ],
+        message: JSON.stringify(deletedBrand),
+        key: deletedBrand.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

@@ -131,11 +131,8 @@ export default class CreateProductUseCase
     try {
       await messageBroker.publish({
         topic: productCreated,
-        messages: [
-          {
-            value: JSON.stringify(product),
-          },
-        ],
+        message: JSON.stringify(product),
+        key: product.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

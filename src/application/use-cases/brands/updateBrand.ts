@@ -65,11 +65,7 @@ export default class UpdateBrand
     try {
       await messageBroker.publish({
         topic: brandUpdated,
-        messages: [
-          {
-            value: JSON.stringify(updated),
-          },
-        ],
+        message: JSON.stringify(updated),
       });
     } catch (error) {
       logger.error((error as Error).message, error);

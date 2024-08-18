@@ -5,7 +5,7 @@ import {
   FindCategoryQuery,
   UpdateCategoryDTO,
 } from '../../domain/dtos/category';
-import MessageBroker from '../../infrastructure/providers/messageBroker';
+import messageBroker from '../../infrastructure/providers/messageBroker';
 import CategorysRepository from '../../infrastructure/repositories/categoriesRepository';
 import CreateCategoryUseCase from '../use-cases/categories/createCategory';
 import DeleteCategorys from '../use-cases/categories/deleteManyCategories';
@@ -16,7 +16,6 @@ import UpdateCategory from '../use-cases/categories/updateCategory';
 
 export class CategorysService {
   private readonly categoriesRepository = new CategorysRepository();
-  private readonly messageBroker = new MessageBroker();
 
   getCategories(params: FindCategoryQuery) {
     return new FindCategorys(this.categoriesRepository).execute(params);
@@ -32,7 +31,7 @@ export class CategorysService {
         categoriesRepo: this.categoriesRepository,
       },
       {
-        messageBroker: this.messageBroker,
+        messageBroker: messageBroker,
       }
     ).execute(params);
   }
@@ -40,19 +39,19 @@ export class CategorysService {
   updateCategory(params: { id: string } & UpdateCategoryDTO) {
     return new UpdateCategory(
       { categoriesRepo: this.categoriesRepository },
-      { messageBroker: this.messageBroker }
+      { messageBroker: messageBroker }
     ).execute(params);
   }
 
   deleteCategory(params: { id: string }) {
     return new DeleteCategory(this.categoriesRepository, {
-      messageBroker: this.messageBroker,
+      messageBroker: messageBroker,
     }).execute(params);
   }
 
   deleteManyCategories(params: FindCategoryFilter) {
     return new DeleteCategorys(this.categoriesRepository, {
-      messageBroker: this.messageBroker,
+      messageBroker: messageBroker,
     }).execute(params);
   }
 }

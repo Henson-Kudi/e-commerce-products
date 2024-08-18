@@ -11,3 +11,5 @@ dist
 
 # Keep logs away from version control
 logs
+
+kafkaclient.properties

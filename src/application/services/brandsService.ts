@@ -5,7 +5,7 @@ import {
   FindBrandQuery,
   UpdateBrandDTO,
 } from '../../domain/dtos/brand';
-import MessageBroker from '../../infrastructure/providers/messageBroker';
+import messageBroker from '../../infrastructure/providers/messageBroker';
 import BrandsRepository from '../../infrastructure/repositories/brandsRepository';
 import CreateBrandUseCase from '../use-cases/brands/createBrand';
 import DeleteBrands from '../use-cases/brands/deleteManyBrands';
@@ -16,7 +16,6 @@ import UpdateBrand from '../use-cases/brands/updateBrand';
 
 export class BrandsService {
   private readonly brandsRepository = new BrandsRepository();
-  private readonly messageBroker = new MessageBroker();
 
   getBrands(params: FindBrandQuery) {
     return new FindBrands(this.brandsRepository).execute(params);
@@ -32,7 +31,7 @@ export class BrandsService {
         brandsRepo: this.brandsRepository,
       },
       {
-        messageBroker: this.messageBroker,
+        messageBroker: messageBroker,
       }
     ).execute(params);
   }
@@ -40,19 +39,19 @@ export class BrandsService {
   updateBrand(params: { id: string } & UpdateBrandDTO) {
     return new UpdateBrand(
       { brandsRepo: this.brandsRepository },
-      { messageBroker: this.messageBroker }
+      { messageBroker: messageBroker }
     ).execute(params);
   }
 
   deleteBrand(params: { id: string }) {
     return new DeleteBrand(this.brandsRepository, {
-      messageBroker: this.messageBroker,
+      messageBroker: messageBroker,
     }).execute(params);
   }
 
   deleteManyBrands(params: FindBrandFilter) {
     return new DeleteBrands(this.brandsRepository, {
-      messageBroker: this.messageBroker,
+      messageBroker: messageBroker,
     }).execute(params);
   }
 }

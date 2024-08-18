@@ -1,6 +1,6 @@
 {
   "productUpdated": "productUpdated",
-  "productCreated": "productCreated",
+  "productCreated": "product.created",
   "productDeleted": "productDeleted",
   "productsDeleted": "productsDeleted",
 

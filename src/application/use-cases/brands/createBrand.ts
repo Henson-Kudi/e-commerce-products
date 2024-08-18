@@ -57,11 +57,8 @@ export default class CreateBrandUseCase
     try {
       await messageBroker.publish({
         topic: brandCreated,
-        messages: [
-          {
-            value: JSON.stringify(newbrand),
-          },
-        ],
+        message: JSON.stringify(newbrand),
+        key: newbrand.id.toString(),
       });
     } catch (error) {
       logger.error((error as Error).message, error);

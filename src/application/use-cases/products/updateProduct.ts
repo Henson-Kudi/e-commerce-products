@@ -127,11 +127,8 @@ export default class Updateproduct
     try {
       await messageBroker.publish({
         topic: productUpdated,
-        messages: [
-          {
-            value: JSON.stringify(updated),
-          },
-        ],
+        message: JSON.stringify(updated),
+        key: updated.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

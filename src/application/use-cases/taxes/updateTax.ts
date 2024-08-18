@@ -65,11 +65,8 @@ export default class UpdateTax
     try {
       await messageBroker.publish({
         topic: taxUpdated,
-        messages: [
-          {
-            value: JSON.stringify(updated),
-          },
-        ],
+        message: JSON.stringify(updated),
+        key: updated.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

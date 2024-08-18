@@ -53,11 +53,8 @@ export default class DeleteCategory
     try {
       await messageBroker.publish({
         topic: categoryDeleted,
-        messages: [
-          {
-            value: JSON.stringify(deletedCategory),
-          },
-        ],
+        message: JSON.stringify(deletedCategory),
+        key: deletedCategory.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

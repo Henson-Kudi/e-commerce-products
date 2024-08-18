@@ -16,6 +16,7 @@ export type UpdateCategoryDTO = {
 };
 
 export type FindCategoryFilter = {
+  id?: string | string[];
   name?: string;
   createdById?: string | string[];
   lastModifiedById?: string | string[];

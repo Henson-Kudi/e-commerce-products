@@ -51,11 +51,8 @@ export default class DeleteTax
     try {
       await messageBroker.publish({
         topic: taxDeleted,
-        messages: [
-          {
-            value: JSON.stringify(deletedTax),
-          },
-        ],
+        message: JSON.stringify(deletedTax),
+        key: deletedTax.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

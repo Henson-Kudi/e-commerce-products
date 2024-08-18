@@ -68,11 +68,8 @@ export default class UpdateCategory
     try {
       await messageBroker.publish({
         topic: categoryUpdated,
-        messages: [
-          {
-            value: JSON.stringify(updated),
-          },
-        ],
+        message: JSON.stringify(updated),
+        key: updated.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

@@ -5,7 +5,7 @@ import {
   FindProductQuery,
   UpdateProductDTO,
 } from '../../domain/dtos/product';
-import MessageBroker from '../../infrastructure/providers/messageBroker';
+import messageBroker from '../../infrastructure/providers/messageBroker';
 import BrandsRepository from '../../infrastructure/repositories/brandsRepository';
 import ProductsRepository from '../../infrastructure/repositories/productsRepository';
 import CreateProductUseCase from '../use-cases/products/createProduct';
@@ -18,7 +18,6 @@ import Updateproduct from '../use-cases/products/updateProduct';
 export class ProductsService {
   private readonly productRepository = new ProductsRepository();
   private readonly brandsRepository = new BrandsRepository();
-  private readonly messageBroker = new MessageBroker();
 
   getProducts(params: FindProductQuery) {
     return new FindProducts(this.productRepository).execute(params);
@@ -35,7 +34,7 @@ export class ProductsService {
         productsRepo: this.productRepository,
       },
       {
-        messageBroker: this.messageBroker,
+        messageBroker: messageBroker,
       }
     ).execute(params);
   }
@@ -43,19 +42,19 @@ export class ProductsService {
   updateProduct(params: UpdateProductDTO) {
     return new Updateproduct(
       { productsRepo: this.productRepository },
-      { messageBroker: this.messageBroker }
+      { messageBroker: messageBroker }
     ).execute(params);
   }
 
   deleteProduct(params: { id: string }) {
     return new DeleteProduct(this.productRepository, {
-      messageBroker: this.messageBroker,
+      messageBroker: messageBroker,
     }).execute(params);
   }
 
   deleteManyProducts(params: FindProductFilter) {
     return new DeleteProducts(this.productRepository, {
-      messageBroker: this.messageBroker,
+      messageBroker: messageBroker,
     }).execute(params);
   }
 }

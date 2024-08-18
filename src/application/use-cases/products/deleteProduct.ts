@@ -42,11 +42,8 @@ export default class DeleteProduct
     try {
       await messageBroker.publish({
         topic: productDeleted,
-        messages: [
-          {
-            value: JSON.stringify(deletedProduct),
-          },
-        ],
+        message: JSON.stringify(deletedProduct),
+        key: deletedProduct.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

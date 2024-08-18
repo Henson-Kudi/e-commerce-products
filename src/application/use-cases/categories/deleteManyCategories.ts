@@ -31,7 +31,14 @@ export default class DeleteCategorys
     try {
       await this.providers.messageBroker.publish({
         topic: categoriesDeleted,
-        messages: [{ value: JSON.stringify(result) }],
+        message: JSON.stringify({
+          ...result,
+          ids: params.id
+            ? Array.isArray(params.id)
+              ? params.id
+              : [params.id]
+            : undefined,
+        }),
       });
     } catch (error) {
       logger.error((error as Error).message, error);

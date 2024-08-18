@@ -57,11 +57,8 @@ export default class CreateTaxUseCase
     try {
       await messageBroker.publish({
         topic: taxCreated,
-        messages: [
-          {
-            value: JSON.stringify(newTax),
-          },
-        ],
+        message: JSON.stringify(newTax),
+        key: newTax.id,
       });
     } catch (error) {
       logger.error((error as Error).message, error);

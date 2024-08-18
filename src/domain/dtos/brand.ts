@@ -16,6 +16,7 @@ export type UpdateBrandDTO = {
 };
 
 export type FindBrandFilter = {
+  id?: string | string[];
   name?: string;
   createdById?: string | string[];
   lastModifiedById?: string | string[];
