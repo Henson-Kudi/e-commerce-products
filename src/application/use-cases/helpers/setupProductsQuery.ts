@@ -14,8 +14,9 @@ export default function setupProductsQuery(filter: FindProductFilter) {
 
   if (filter?.price) {
     const price: Record<string, unknown> = {};
-    if (filter.price.min && filter.price.min > 0) {
-      price.gte = filter.price.min;
+
+    if (filter.price.min && Number(filter.price.min) > 0) {
+      price.gte = Number(filter.price.min);
     }
     if (filter.price.max && filter.price.max > 0) {
       price.lte = filter.price.max;
@@ -118,8 +119,8 @@ export default function setupProductsQuery(filter: FindProductFilter) {
   }
   if (filter?.status) {
     query.status = Array.isArray(filter.status)
-      ? { in: filter.status }
-      : { equals: filter.status };
+      ? { in: filter.status?.filter(item => item && !isNaN(Number(item)))?.map(item => Number(item)) }
+      : { equals: Number(filter.status) };
   }
   if (filter?.stockStatus) {
     query.stockStatus = Array.isArray(filter.stockStatus)

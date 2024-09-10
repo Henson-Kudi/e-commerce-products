@@ -83,7 +83,7 @@ COPY --chown=node:node --from=builder /app/dist ./dist
 RUN mkdir logs
 
 # Install dependencies only (Also ignore scripts)
-RUN npm ci --ignore-scripts
+RUN npm ci --omit=dev --ignore-scripts
 
 # Rebuild node-rdkafka to ensure native bindings are built correctly
 RUN npm rebuild node-rdkafka
