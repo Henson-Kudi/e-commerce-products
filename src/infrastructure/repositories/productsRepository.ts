@@ -51,6 +51,13 @@ export default class ProductsRepository implements IProductsRepository {
     return database.product.findFirst(filter);
   }
 
+  async getLastProduct(): Promise<Product | null> {
+    return (await database.product.findMany({
+      orderBy: { serialNumber: 'desc' },
+      take: 1,
+    }))[0]
+  }
+
   countProducts(filter: Prisma.ProductCountArgs): Promise<number> {
     return database.product.count(filter);
   }

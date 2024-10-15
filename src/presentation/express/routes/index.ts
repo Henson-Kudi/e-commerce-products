@@ -24,6 +24,7 @@ import deleteTax from './handlers/taxes/deletetax';
 import deleteTaxes from './handlers/taxes/deleteTaxes';
 import updateTax from './handlers/taxes/updateTax';
 import getTax from './handlers/taxes/getTax';
+import generateProductSku from './handlers/products/generateProductSku';
 
 const router = Router();
 
@@ -40,6 +41,8 @@ router
   .get(getProducts)
   .post(createProduct)
   .delete(deleteProducts);
+
+router.post('/products/generate-sku', generateProductSku);
 router
   .route('/products/:id')
   .get(getProduct)

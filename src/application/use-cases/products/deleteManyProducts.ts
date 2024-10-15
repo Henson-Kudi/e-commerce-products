@@ -29,7 +29,7 @@ export default class DeleteProducts
 
     // Publish products deleted message message
     try {
-      await this.providers.messageBroker.publish({
+      this.providers.messageBroker.publish({
         topic: productsDeleted,
         message: JSON.stringify({
           ...result,

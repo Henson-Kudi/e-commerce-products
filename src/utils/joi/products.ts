@@ -26,7 +26,7 @@ const CreateProduct = Joi.object({
   }),
   categories: Joi.array().items(Joi.string().uuid()).required(),
   tags: Joi.array().items(Joi.string().min(1)).optional().allow(null),
-  SKU: Joi.string().required(),
+  SKU: Joi.string().optional(),
   UPC: Joi.string().optional().allow(null).allow(''),
   EAN: Joi.string().optional().allow(null).allow(''),
   media: Joi.array()

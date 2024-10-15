@@ -16,6 +16,7 @@ export default interface IProductsRepository {
     ptions?: FindProductOptions
   ): Promise<Product | null>;
   getFirstProduct(filter: Prisma.ProductFindFirstArgs): Promise<Product | null>;
+  getLastProduct(): Promise<Product | null>;
 
   countProducts(filter: Prisma.ProductCountArgs): Promise<number>;
 

@@ -54,6 +54,7 @@ model Product {
   weight            String? // Product weight
   dimensions        String? // Product dimensions
   attributes        Json? //Other product attributes. Record<string, string>
+  productDiscouts   ProductDiscout[]
 }
 
 model Brand {
@@ -93,4 +94,23 @@ model Tax {
   updatedAt        DateTime  @updatedAt
   products         Product[]
   description      String?
+}
+
+model ProductDiscout{
+  id String @id() @default(uuid())
+  productId String
+  product   Product @relation(references: [id], fields: [productId])
+  discountId String // discount id in discounts service
+  discountType String //From discounts service
+  discountRate Decimal? //Discount rate (provide this or discount value)
+  discountValue Float? //Discount amount (provide this or discount rate)
+  usageLimit Int?
+  usageCount Int @default(0)
+  isActive  Boolean @default(true) // from discounts service
+  validFrom DateTime // from discounts service
+  validTo DateTime // from discounts service
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([productId, discountId])
 }

@@ -12,6 +12,7 @@ import CreateProductUseCase from '../use-cases/products/createProduct';
 import DeleteProducts from '../use-cases/products/deleteManyProducts';
 import DeleteProduct from '../use-cases/products/deleteProduct';
 import FindProducts from '../use-cases/products/findProducts';
+import GenerateProductSku from '../use-cases/products/generateProductSku';
 import GetProduct from '../use-cases/products/getProduct';
 import Updateproduct from '../use-cases/products/updateProduct';
 
@@ -56,6 +57,13 @@ export class ProductsService {
     return new DeleteProducts(this.productRepository, {
       messageBroker: messageBroker,
     }).execute(params);
+  }
+
+  generateProductSku(params: {
+    name: string
+    brandName?: string
+  }) {
+    return new GenerateProductSku(this.productRepository).execute(params);
   }
 }
 
