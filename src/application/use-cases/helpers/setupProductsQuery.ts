@@ -12,18 +12,6 @@ export default function setupProductsQuery(filter: FindProductFilter) {
     };
   }
 
-  if (filter?.price) {
-    const price: Record<string, unknown> = {};
-
-    if (filter.price.min && Number(filter.price.min) > 0) {
-      price.gte = Number(filter.price.min);
-    }
-    if (filter.price.max && filter.price.max > 0) {
-      price.lte = filter.price.max;
-    }
-
-    Object.keys(price).length && (query.price = price);
-  }
   if (filter?.originalPrice) {
     const originalPrice: Record<string, unknown> = {};
     if (filter.originalPrice.min && filter.originalPrice.min > 0) {
@@ -35,18 +23,18 @@ export default function setupProductsQuery(filter: FindProductFilter) {
 
     Object.keys(originalPrice).length && (query.originalPrice = originalPrice);
   }
-  if (filter?.discountedPrice) {
-    const discountedPrice: Record<string, unknown> = {};
-    if (filter.discountedPrice.min && filter.discountedPrice.min > 0) {
-      discountedPrice.gte = filter.discountedPrice.min;
-    }
-    if (filter.discountedPrice.max && filter.discountedPrice.max > 0) {
-      discountedPrice.lte = filter.discountedPrice.max;
-    }
+  // if (filter?.discountedPrice) {
+  //   const discountedPrice: Record<string, unknown> = {};
+  //   if (filter.discountedPrice.min && filter.discountedPrice.min > 0) {
+  //     discountedPrice.gte = filter.discountedPrice.min;
+  //   }
+  //   if (filter.discountedPrice.max && filter.discountedPrice.max > 0) {
+  //     discountedPrice.lte = filter.discountedPrice.max;
+  //   }
 
-    Object.keys(discountedPrice).length &&
-      (query.discountedPrice = discountedPrice);
-  }
+  //   Object.keys(discountedPrice).length &&
+  //     (query.discountedPrice = discountedPrice);
+  // }
   if (filter?.qtyInStock) {
     const qtyInStock: Record<string, unknown> = {};
     if (filter.qtyInStock.min && filter.qtyInStock.min > 0) {
@@ -119,7 +107,11 @@ export default function setupProductsQuery(filter: FindProductFilter) {
   }
   if (filter?.status) {
     query.status = Array.isArray(filter.status)
-      ? { in: filter.status?.filter(item => item && !isNaN(Number(item)))?.map(item => Number(item)) }
+      ? {
+          in: filter.status
+            ?.filter((item) => item && !isNaN(Number(item)))
+            ?.map((item) => Number(item)),
+        }
       : { equals: Number(filter.status) };
   }
   if (filter?.stockStatus) {
@@ -199,40 +191,40 @@ export default function setupProductsQuery(filter: FindProductFilter) {
     }
     Object.keys(updatedAt).length && (query.updatedAt = updatedAt);
   }
-  if (filter?.discountStartDate) {
-    const discountStartDate: Record<string, unknown> = {};
-    if (
-      filter.discountStartDate.start &&
-      moment.isDate(new Date(filter.discountStartDate.start))
-    ) {
-      discountStartDate.gte = moment(filter.discountStartDate.start).toDate(); // Convert to Date
-    }
-    if (
-      filter.discountStartDate.end &&
-      moment.isDate(new Date(filter.discountStartDate.end))
-    ) {
-      discountStartDate.lte = moment(filter.discountStartDate.end).toDate(); // Convert to Date
-    }
-    Object.keys(discountStartDate).length &&
-      (query.discountStartDate = discountStartDate);
-  }
-  if (filter?.discountEndDate) {
-    const discountEndDate: Record<string, unknown> = {};
-    if (
-      filter.discountEndDate.start &&
-      moment.isDate(new Date(filter.discountEndDate.start))
-    ) {
-      discountEndDate.gte = moment(filter.discountEndDate.start).toDate(); // Convert to Date
-    }
-    if (
-      filter.discountEndDate.end &&
-      moment.isDate(new Date(filter.discountEndDate.end))
-    ) {
-      discountEndDate.lte = moment(filter.discountEndDate.end).toDate(); // Convert to Date
-    }
-    Object.keys(discountEndDate).length &&
-      (query.discountEndDate = discountEndDate);
-  }
+  // if (filter?.discountStartDate) {
+  //   const discountStartDate: Record<string, unknown> = {};
+  //   if (
+  //     filter.discountStartDate.start &&
+  //     moment.isDate(new Date(filter.discountStartDate.start))
+  //   ) {
+  //     discountStartDate.gte = moment(filter.discountStartDate.start).toDate(); // Convert to Date
+  //   }
+  //   if (
+  //     filter.discountStartDate.end &&
+  //     moment.isDate(new Date(filter.discountStartDate.end))
+  //   ) {
+  //     discountStartDate.lte = moment(filter.discountStartDate.end).toDate(); // Convert to Date
+  //   }
+  //   Object.keys(discountStartDate).length &&
+  //     (query.discountStartDate = discountStartDate);
+  // }
+  // if (filter?.discountEndDate) {
+  //   const discountEndDate: Record<string, unknown> = {};
+  //   if (
+  //     filter.discountEndDate.start &&
+  //     moment.isDate(new Date(filter.discountEndDate.start))
+  //   ) {
+  //     discountEndDate.gte = moment(filter.discountEndDate.start).toDate(); // Convert to Date
+  //   }
+  //   if (
+  //     filter.discountEndDate.end &&
+  //     moment.isDate(new Date(filter.discountEndDate.end))
+  //   ) {
+  //     discountEndDate.lte = moment(filter.discountEndDate.end).toDate(); // Convert to Date
+  //   }
+  //   Object.keys(discountEndDate).length &&
+  //     (query.discountEndDate = discountEndDate);
+  // }
 
   return query;
 }

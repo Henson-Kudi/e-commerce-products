@@ -25,15 +25,13 @@ import deleteTaxes from './handlers/taxes/deleteTaxes';
 import updateTax from './handlers/taxes/updateTax';
 import getTax from './handlers/taxes/getTax';
 import generateProductSku from './handlers/products/generateProductSku';
+import getProductBySlug from './handlers/products/getProductBySlug';
+import getProductDiscounts from './handlers/products/getProductDiscounts';
+import deleteProductDiscounts from './handlers/products/deleteProductDiscounts';
+import createProductsDiscount from './handlers/products/creatProductsDiscount';
+import createProductDiscounts from './handlers/products/createProductDiscounts';
 
 const router = Router();
-
-// Remember to remove this middleware. This is to similuate an authenticated request
-router.use((req, res, next) => {
-  req.headers.userId = '388953e6-2eae-47f3-bc69-5267c9b7b627';
-  next();
-});
-// Define your routes here
 
 // PRODUCT ROUTES
 router
@@ -43,11 +41,26 @@ router
   .delete(deleteProducts);
 
 router.post('/products/generate-sku', generateProductSku);
+
+//Delete  Product discounts
+router
+  .route('/products/discounts')
+  .post(createProductsDiscount)
+  .put(deleteProductDiscounts);
+
+router.route('/products/discounts/bulk').post(createProductDiscounts);
+
 router
   .route('/products/:id')
   .get(getProduct)
   .put(updateProduct)
   .delete(deleteProduct);
+
+// Get product discounts
+router.route('/products/:id/discounts').get(getProductDiscounts);
+
+// Get product by slug
+router.route('/product/:slug').get(getProductBySlug);
 
 // BRANDS ROUTES
 router.route('/brands').get(getBrands).post(createBrand).delete(deleteBrands);

@@ -1,21 +1,31 @@
 {
-  "productUpdated": "productUpdated",
+  "subscriptions": {
+    "discountCreated": "discount.created",
+    "discountDeleted": "discount.deleted",
+    "discountsDeleted": "discounts.deleted",
+    "discountsDeactivated": "discounts.deactivated",
+    "discountApplied": "discount.applied"
+  },
+  "productUpdated": "product.updated",
   "productCreated": "product.created",
-  "productDeleted": "productDeleted",
-  "productsDeleted": "productsDeleted",
+  "productDeleted": "product.deleted",
+  "productsDeleted": "products.deleted",
+  "discountApplied": "product.discounts.applied",
+  "productDiscountsDeleted": "product.discounts.deleted",
+  "productsDiscountCreated": "product.discount.created",
 
-  "brandUpdated": "brandUpdated",
-  "brandCreated": "brandCreated",
-  "brandDeleted": "brandDeleted",
-  "brandsDeleted": "brandsDeleted",
+  "brandUpdated": "product.brand.updated",
+  "brandCreated": "product.brand.created",
+  "brandDeleted": "product.brand.deleted",
+  "brandsDeleted": "product.brands.deleted",
 
-  "categoryUpdated": "categoryUpdated",
-  "categoryCreated": "categoryCreated",
-  "categoryDeleted": "categoryDeleted",
-  "categoriesDeleted": "categoriesDeleted",
+  "categoryUpdated": "product.category.updated",
+  "categoryCreated": "product.category.created",
+  "categoryDeleted": "product.category.deleted",
+  "categoriesDeleted": "product.categories.deleted",
 
-  "taxUpdated": "taxUpdated",
-  "taxCreated": "taxCreated",
-  "taxDeleted": "taxDeleted",
-  "taxesDeleted": "taxesDeleted"
+  "taxUpdated": "product.tax.updated",
+  "taxCreated": "product.tax.created",
+  "taxDeleted": "product.tax.deleted",
+  "taxesDeleted": "product.taxes.deleted"
 }

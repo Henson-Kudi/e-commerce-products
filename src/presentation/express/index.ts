@@ -13,7 +13,7 @@ const PORT = envConf.PORT;
 
 app.use(
   cors({
-    origin: '*', //Manage cors as you want
+    origin: 'http://localhost:3000', //Manage cors as you want
   })
 );
 
@@ -26,6 +26,12 @@ if (envConf.NODE_ENV !== 'production') {
 }
 
 const baseUrl = '/api/v1/products-service'; // change as you like
+
+app.use((req, res, next) => {
+  req.headers.userId =
+    req.headers?.userId ?? req.headers?.userid ?? req.headers?.['user-id'];
+  next();
+});
 
 //
 app.use(`${baseUrl}`, router);

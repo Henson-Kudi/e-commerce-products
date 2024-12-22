@@ -5,7 +5,8 @@ import RequestObject from '../../../../utils/types/requestObject';
 import IContoller from '../Icontroller';
 
 export class GetProductsController
-  implements IContoller<Promise<IReturnValueWithPagination<Product[]>>> {
+  implements IContoller<Promise<IReturnValueWithPagination<Product[]>>>
+{
   handle(
     request: RequestObject
   ): Promise<IReturnValueWithPagination<Product[]>> {
@@ -16,8 +17,17 @@ export class GetProductsController
         withBrand: request.query?.options?.withBrand === 'true',
         withCategories: request.query?.options?.withCategories === 'true',
         withTaxes: request.query?.options?.withTaxes === 'true',
-        page: request.query?.options?.page && !isNaN(Number(request.query?.options?.page)) ? Number(request.query?.options?.page) : 1,
-        limit: request.query?.options?.limit && !isNaN(Number(request.query?.options?.limit)) ? Number(request.query?.options?.limit) : 10,
+        withDiscounts: request.query?.options?.withDiscounts === 'true',
+        page:
+          request.query?.options?.page &&
+          !isNaN(Number(request.query?.options?.page))
+            ? Number(request.query?.options?.page)
+            : 1,
+        limit:
+          request.query?.options?.limit &&
+          !isNaN(Number(request.query?.options?.limit))
+            ? Number(request.query?.options?.limit)
+            : 10,
       },
     });
   }

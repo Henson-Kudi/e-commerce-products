@@ -16,7 +16,8 @@ import logger from '../../../utils/logger';
 import { validateCreateBrand } from '../../../utils/joi/brand';
 
 export default class CreateProductUseCase
-  implements IUseCase<CreateProductDTO, Promise<IReturnValue<Product>>> {
+  implements IUseCase<CreateProductDTO, Promise<IReturnValue<Product>>>
+{
   constructor(
     private readonly repositories: {
       productsRepo: IProductsRepository;
@@ -25,7 +26,7 @@ export default class CreateProductUseCase
     private readonly providers: {
       messageBroker: IMessageBroker;
     }
-  ) { }
+  ) {}
   async execute(data: CreateProductDTO): Promise<IReturnValue<Product>> {
     const { brandsRepo, productsRepo } = this.repositories;
     const { messageBroker } = this.providers;
@@ -55,7 +56,10 @@ export default class CreateProductUseCase
 
     // Generate sku if not provided
     let brandInitials: string | undefined = undefined;
-    let productInitials = slugify(data.name).split('-').map(word => word[0].toUpperCase()).join('');
+    let productInitials = slugify(data.name)
+      .split('-')
+      .map((word) => word[0].toUpperCase())
+      .join('');
 
     // If no brand and no brandId, throw error
     if (!data.brand && !data.brandId) {
@@ -93,53 +97,81 @@ export default class CreateProductUseCase
       }
       // Generate brand initials
 
-      brandInitials = slugify(data.brand!.name).split('-').map(word => word[0].toUpperCase()).join('');
-
+      brandInitials = slugify(data.brand!.name)
+        .split('-')
+        .map((word) => word[0].toUpperCase())
+        .join('');
     } else if (data.brandId) {
-      const brand = await this.repositories.brandsRepo.getBrandById(data.brandId);
+      const brand = await this.repositories.brandsRepo.getBrandById(
+        data.brandId
+      );
       if (!brand) {
         throw new ErrorClass('Brand not found', ResponseCodes.NotFound);
       }
-      brandInitials = slugify(brand.name).split('-').map(word => word[0].toUpperCase()).join('');
+      brandInitials = slugify(brand.name)
+        .split('-')
+        .map((word) => word[0].toUpperCase())
+        .join('');
     }
 
     // get last product in order to generate new SKU and new product reference
     const lastProduct = await productsRepo.getLastProduct();
 
-    const sku = `SKU-${productInitials}${brandInitials}-${(lastProduct ? lastProduct.serialNumber + 1 : 1).toString().padStart(6, '0')}`
-    const productReference = `PROD-${productInitials}-${(lastProduct ? lastProduct.serialNumber + 1 : 1).toString().padStart(6, '0')}`
+    const sku = `SKU-${productInitials}${brandInitials}-${(lastProduct ? lastProduct.serialNumber + 1 : 1).toString().padStart(6, '0')}`;
+    // const productReference = `PROD-${productInitials}-${(lastProduct ? lastProduct.serialNumber + 1 : 1).toString().padStart(6, '0')}`;
+
+    const { discount, ...restData } = data;
 
     // Attempt to create product
     const product = await productsRepo.createProduct({
       data: {
-        ...data,
+        ...restData,
+        name: data.name,
+        description: data.description,
+        originalPrice: data.originalPrice,
+        qtyInStock: data.qtyInStock,
+        // reference: productReference,
+        createdById: data.createdById,
         SKU: data.SKU || sku,
         brandId: data.brandId!,
-        discountStartDate:
-          data.discountStartDate && moment.isDate(data.discountStartDate)
-            ? moment(data.discountStartDate).toDate()
-            : undefined,
-        discountEndDate:
-          data.discountEndDate && moment.isDate(data.discountEndDate)
-            ? moment(data.discountEndDate).toDate()
-            : undefined,
+        // discountStartDate:
+        //   data.discountStartDate && moment.isDate(data.discountStartDate)
+        //     ? moment(data.discountStartDate).toDate()
+        //     : undefined,
+        // discountEndDate:
+        //   data.discountEndDate && moment.isDate(data.discountEndDate)
+        //     ? moment(data.discountEndDate).toDate()
+        //     : undefined,
         brand: undefined,
         slug: slugify(data.name),
         status: data.status || ProductStatus.ACTIVE,
         stockStatus: data.stockStatus || StockStatus.IN_STOCK,
         taxes: data.taxes
           ? {
-            connect: data.taxes.map((tax) => ({
-              id: tax,
-            })),
-          }
+              connect: data.taxes.map((tax) => ({
+                id: tax,
+              })),
+            }
           : undefined,
         categories: data?.categories
           ? {
-            connect: data.categories.map((category) => ({
-              id: category,
-            })),
-          }
+              connect: data.categories.map((category) => ({
+                id: category,
+              })),
+            }
+          : undefined,
+        discounts: discount
+          ? {
+              create: {
+                startDate: moment(discount.startDate).toDate(),
+                endDate: moment(discount.endDate).toDate(),
+                discountType: discount.type,
+                discountValue: discount.value,
+                autoApply: true,
+                discountName: discount.name,
+                isActive: true,
+              },
+            }
           : undefined,
       },
       include: {

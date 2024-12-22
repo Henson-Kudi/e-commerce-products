@@ -10,7 +10,10 @@ export class CreateBrandController
   handle(request: RequestObject): Promise<IReturnValue<Brand | null>> {
     return brandsService.createBrand({
       ...(request.body ?? {}),
-      createdById: request!.headers!.userId,
+      createdById:
+        request.headers?.userId ??
+        request.headers?.userid ??
+        request?.headers?.['user-id'],
     });
   }
 }

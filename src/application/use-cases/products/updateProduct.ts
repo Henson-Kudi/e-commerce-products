@@ -10,6 +10,7 @@ import IProductsRepository from '../../repositories/productsRepository';
 import IUseCase from '../protocols';
 import { productUpdated } from '../../../utils/kafkaTopics.json';
 import logger from '../../../utils/logger';
+import moment from 'moment';
 
 export default class Updateproduct
   implements
@@ -51,7 +52,7 @@ export default class Updateproduct
 
     // Ensure that sku is not duplicated if we want to update it
     if (data.SKU) {
-      findExistingQuery.push({ SKU: data.SKU as string, mode: 'insensitive' });
+      findExistingQuery.push({ SKU: data.SKU as string });
     }
 
     if (findExistingQuery.length) {
@@ -93,7 +94,7 @@ export default class Updateproduct
     if (data.categories) {
       // Step 2: Determine taxids to keep, disconnect, and connect
       const idsToDisconnect = productToUpdate?.categories?.filter(
-        (tax) => !data?.categories?.includes(tax.id)
+        (category) => !data?.categories?.includes(category.id)
       );
 
       const idsToConnect = data.categories.filter(
@@ -112,6 +113,14 @@ export default class Updateproduct
     updateData = {
       ...data,
       ...updateData,
+      // discountStartDate:
+      //   data.discountStartDate && moment.isDate(data.discountStartDate)
+      //     ? moment(data.discountStartDate).toDate()
+      //     : undefined,
+      // discountEndDate:
+      //   data.discountEndDate && moment.isDate(data.discountEndDate)
+      //     ? moment(data.discountEndDate).toDate()
+      //     : undefined,
       slug: data?.name ? slugify(data.name as string) : undefined,
     };
 

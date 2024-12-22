@@ -20,7 +20,7 @@ model Product {
   serialNumber      Int        @unique @default(autoincrement())
   name              String     @unique //Product name has to be unique accross
   description       String?
-  price             Float
+  // price             Float
   currency          String?    @default("AED")
   brandId           String
   brand             Brand      @relation(references: [id], fields: [brandId])
@@ -41,11 +41,9 @@ model Product {
   metaKeywords      String[] // SEO
   qtyInStock        Int?       @default(0)
   originalPrice     Float
-  taxes             Tax[] //Manage taxes
-  categories        Category[] //Manage taxes
-  discountedPrice   Float?
-  discountStartDate DateTime?
-  discountEndDate   DateTime?
+  taxes             Tax[] // Manage taxes
+  categories        Category[] // Manage product categories
+  discounts         ProductDiscount[]
   averageRating     Float?     @default(0)
   reviewCount       Int?       @default(0)
   unit              String // unit of measurement (kg, pcs, plates, unit, pack, etc)
@@ -54,7 +52,6 @@ model Product {
   weight            String? // Product weight
   dimensions        String? // Product dimensions
   attributes        Json? //Other product attributes. Record<string, string>
-  productDiscouts   ProductDiscout[]
 }
 
 model Brand {
@@ -96,21 +93,26 @@ model Tax {
   description      String?
 }
 
-model ProductDiscout{
+model ProductDiscount{
   id String @id() @default(uuid())
   productId String
   product   Product @relation(references: [id], fields: [productId])
-  discountId String // discount id in discounts service
+  discountId String? // discount id in discounts service
   discountType String //From discounts service
-  discountRate Decimal? //Discount rate (provide this or discount value)
-  discountValue Float? //Discount amount (provide this or discount rate)
-  usageLimit Int?
-  usageCount Int @default(0)
+  discountName String @default("No name")
+  // discountRate Decimal? //Discount rate (provide this or discount value)
+  discountValue Decimal? //Discount amount (provide this or discount rate)
   isActive  Boolean @default(true) // from discounts service
-  validFrom DateTime // from discounts service
-  validTo DateTime // from discounts service
+  startDate DateTime // from discounts service
+  endDate DateTime // from discounts service
+  autoApply   Boolean?    @default(false) // from discounts service
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
   @@unique([productId, discountId])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
 }

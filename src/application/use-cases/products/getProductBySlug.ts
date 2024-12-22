@@ -4,10 +4,10 @@ import IReturnValue from '../../../domain/valueObjects/returnValue';
 import IProductsRepository from '../../repositories/productsRepository';
 import IUseCase from '../protocols';
 
-export default class GetProduct
+export default class GetProductBySlug
   implements
     IUseCase<
-      FindProductOptions & { id: string },
+      FindProductOptions & { slug: string },
       Promise<IReturnValue<Product | null>>
     >
 {
@@ -15,14 +15,14 @@ export default class GetProduct
 
   async execute(
     params: FindProductOptions & {
-      id: string;
+      slug: string;
     }
   ): Promise<IReturnValue<Product | null>> {
-    const result = await this.repo.getProductById(params.id, {
+    const result = await this.repo.getProductBySlug(params.slug, {
       withBrand: !!params?.withBrand,
-      withCategories: !!params.withCategories,
-      withTaxes: !!params.withTaxes,
-      withDiscounts: !!params.withDiscounts,
+      withCategories: !!params?.withCategories,
+      withTaxes: !!params?.withTaxes,
+      withDiscounts: !!params?.withDiscounts,
     });
 
     return {

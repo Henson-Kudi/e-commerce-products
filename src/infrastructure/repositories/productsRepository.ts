@@ -27,6 +27,7 @@ export default class ProductsRepository implements IProductsRepository {
         brand: options?.withBrand,
         categories: options?.withCategories,
         taxes: options?.withTaxes,
+        discounts: options?.withDiscounts,
       },
     });
   }
@@ -41,6 +42,16 @@ export default class ProductsRepository implements IProductsRepository {
         brand: options?.withBrand,
         categories: options?.withCategories,
         taxes: options?.withTaxes,
+        discounts: options?.withDiscounts
+          ? {
+              where: {
+                isActive: true,
+                endDate: {
+                  gte: new Date(),
+                },
+              },
+            }
+          : undefined,
       },
     });
   }
@@ -52,10 +63,12 @@ export default class ProductsRepository implements IProductsRepository {
   }
 
   async getLastProduct(): Promise<Product | null> {
-    return (await database.product.findMany({
-      orderBy: { serialNumber: 'desc' },
-      take: 1,
-    }))[0]
+    return (
+      await database.product.findMany({
+        orderBy: { serialNumber: 'desc' },
+        take: 1,
+      })
+    )[0];
   }
 
   countProducts(filter: Prisma.ProductCountArgs): Promise<number> {

@@ -19,31 +19,27 @@ export default class FindProducts
 
     const query = setupProductsQuery(filter);
 
-    const queryOptions: Record<string, boolean> = {};
-
     const pagination = setupPagination({
       page: options?.page,
       limit: options?.limit,
     });
 
-    // Setup query options
-    if (options?.withBrand) {
-      queryOptions.brand = true;
-    }
-
-    if (options?.withCategories) {
-      queryOptions.categories = true;
-    }
-
-    if (options?.withTaxes) {
-      queryOptions.taxes = true;
-    }
-
     const total = await this.repo.countProducts({ where: query });
 
     const result = await this.repo.getProducts({
       where: query,
-      include: queryOptions,
+      include: {
+        brand: options?.withBrand,
+        categories: options?.withCategories,
+        taxes: options?.withTaxes,
+        discounts: options?.withDiscounts
+          ? {
+              where: {
+                isActive: true,
+              },
+            }
+          : undefined,
+      },
       skip: pagination.skip,
       take: pagination.limit,
     });

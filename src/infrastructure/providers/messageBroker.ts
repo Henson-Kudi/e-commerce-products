@@ -8,6 +8,7 @@ import Kafka from 'node-rdkafka';
 import logger from '../../utils/logger';
 import getKafkaConfig from '../../utils/getKafkaCofig';
 import moment from 'moment';
+import envConf from '../../env.conf';
 
 export class MessageBroker implements IMessageBroker {
   private producer: Kafka.Producer;
@@ -16,15 +17,19 @@ export class MessageBroker implements IMessageBroker {
   constructor() {
     const config = getKafkaConfig('kafkaclient.properties');
 
-    this.producer = new Kafka.Producer(config);
+    this.producer = new Kafka.Producer({
+      ...config,
+      dr_msg_cb: true, // Enable delivery reports
+    });
 
     this.consumer = new Kafka.KafkaConsumer(
       {
         ...config,
+        'enable.auto.commit': false,
         'group.id': 'products-group',
       },
       {
-        'auto.offset.reset': 'earliest',
+        'auto.offset.reset': 'latest',
       }
     );
 
@@ -78,7 +83,7 @@ export class MessageBroker implements IMessageBroker {
   public publish(params: PublishMessageParams): void {
     try {
       if (!this.producer.isConnected()) {
-        logger.warn('Produver not connected');
+        logger.warn('Producer not connected');
         logger.info('Retrying connection');
         this.__init_producer();
       }
