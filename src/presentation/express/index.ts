@@ -13,7 +13,7 @@ const PORT = envConf.PORT;
 
 app.use(
   cors({
-    origin: 'http://localhost:3000', //Manage cors as you want
+    origin: (req, cb) => cb(null, true), //Manage cors as you want
   })
 );
 

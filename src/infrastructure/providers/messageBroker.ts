@@ -9,27 +9,39 @@ import logger from '../../utils/logger';
 import getKafkaConfig from '../../utils/getKafkaCofig';
 import moment from 'moment';
 import envConf from '../../env.conf';
+import path from 'path';
 
 export class MessageBroker implements IMessageBroker {
   private producer: Kafka.Producer;
   private consumer: Kafka.KafkaConsumer;
+  private readonly caKey = path.join(envConf.baseDir, 'certs/ca.pem')
+  private readonly serviceCert = path.join(envConf.baseDir, 'certs/service.cert')
+  private readonly serviceKey = path.join(envConf.baseDir, 'certs/service.key')
 
   constructor() {
     const config = getKafkaConfig('kafkaclient.properties');
 
     this.producer = new Kafka.Producer({
-      ...config,
-      dr_msg_cb: true, // Enable delivery reports
+      'metadata.broker.list': envConf.kafka.url,
+      'security.protocol': 'ssl',
+      'ssl.ca.location': this.caKey,
+      'ssl.certificate.location': this.serviceCert,
+      'ssl.key.location': this.serviceKey,
+      'log.connection.close': true
     });
 
     this.consumer = new Kafka.KafkaConsumer(
       {
-        ...config,
-        'enable.auto.commit': false,
-        'group.id': 'products-group',
+        'security.protocol': 'ssl',
+        'ssl.ca.location': this.caKey,
+        'ssl.certificate.location': this.serviceCert,
+        'ssl.key.location': this.serviceKey,
+        'log.connection.close': true,
+        'group.id': 'products-service',
+        'metadata.broker.list': envConf.kafka.url,
       },
       {
-        'auto.offset.reset': 'latest',
+        'auto.offset.reset': 'earliest',
       }
     );
 

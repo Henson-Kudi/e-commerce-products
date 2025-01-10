@@ -14,3 +14,6 @@ logs
 
 # Others
 kafkaclient.properties
+
+# certificates
+certs
